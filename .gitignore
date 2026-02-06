@@ -1,0 +1,13 @@
+# Ignore Data
+*.csv
+*.xlsx
+
+# Ignore Junk folders
+Garbage/
+.ipynb_checkpoints/
+__pycache__/
+main/
+
+# Ignore scratchpads
+queries.txt
+support_chat.ipynb

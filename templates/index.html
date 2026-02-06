@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroRide | Colorful AI</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f3f4f6;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1500px; /* For 3D effect */
+        }
+
+        /* --- COLORFUL ANIMATED BACKGROUND --- */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.8;
+            animation: move 10s infinite alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #ff0080; animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #7928ca; animation-delay: 2s; }
+        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #00dfd8; animation-delay: 4s; }
+        
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, -50px) scale(1.1); }
+        }
+
+        /* --- GLASSMOPHISM CARD --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            border-radius: 40px;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* --- VIBRANT INPUTS --- */
+        .fun-input {
+            background: white;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            color: #333;
+            font-weight: 700;
+        }
+        .fun-input:focus {
+            border-color: #7928ca;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(121, 40, 202, 0.2);
+            outline: none;
+        }
+
+        /* --- GRADIENT TEXT --- */
+        .text-gradient {
+            background: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- SUPER BUTTON --- */
+        .super-btn {
+            background: linear-gradient(45deg, #ff0080, #7928ca, #ff4d4d);
+            background-size: 200% 200%;
+            animation: gradient-move 3s ease infinite;
+            color: white;
+            border: none;
+            transition: 0.3s;
+        }
+        .super-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 0, 128, 0.4);
+        }
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- RANGE SLIDERS --- */
+        input[type=range] {
+            -webkit-appearance: none; background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 18px; width: 18px;
+            background: #ff0080; border-radius: 50%; cursor: pointer;
+            margin-top: -6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; background: #e5e7eb; border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div id="tilt-card" class="glass-card w-[95%] max-w-6xl h-[90vh] flex flex-col lg:flex-row overflow-hidden relative">
+        
+        <div class="w-full lg:w-7/12 p-8 lg:p-12 overflow-y-auto">
+            <h1 class="text-4xl lg:text-5xl font-extrabold mb-2 text-slate-800">
+                Aero<span class="text-gradient">Ride</span>
+            </h1>
+            <p class="text-slate-500 font-medium mb-8">AI-Powered Dynamic Pricing Engine</p>
+
+            <form id="aiForm" class="space-y-5">
+                <div class="p-5 bg-white/50 rounded-3xl border border-white">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center mr-3 font-bold">1</div>
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Route</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <select name="source" class="fun-input w-full p-3 rounded-xl text-sm cursor-pointer">
+                            <option>Financial District</option><option>Theatre District</option><option>Back Bay</option>
+                            <option>Beacon Hill</option><option>Haymarket Square</option><option>Fenway</option>
+                            <option>Northeastern University</option><option>West End</option><option>Boston University</option>
+                            <option>South Station</option><option>North End</option><option>North Station</option>
+                        </select>
+                        <select name="destination" class="fun-input w-full p-3 rounded-xl text-sm cursor-pointer">
+                            <option selected>South Station</option><option>North Station</option><option>Financial District</option>
+                            <option>West End</option><option>Theatre District</option><option>Haymarket Square</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-5 bg-white/50 rounded-3xl border border-white">
+                         <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center mr-3 font-bold">2</div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase">Brand</h3>
+                        </div>
+                        <select name="cab_type" class="fun-input w-full p-3 rounded-xl text-sm">
+                            <option>Uber</option><option>Lyft</option>
+                        </select>
+                    </div>
+                    <div class="p-5 bg-white/50 rounded-3xl border border-white">
+                         <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center mr-3 font-bold">3</div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase">Type</h3>
+                        </div>
+                        <select name="name" class="fun-input w-full p-3 rounded-xl text-sm">
+                            <option>UberX</option><option>Shared</option><option>UberXL</option><option>Black</option>
+                            <option>Lyft XL</option><option>Lux Black</option><option>WAV</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative group">
+                        <label class="absolute -top-3 left-4 bg-white px-2 text-xs font-bold text-pink-500 shadow-sm rounded-full">Distance (mi)</label>
+                        <input type="number" name="distance" step="0.01" max="92.0" value="2.18" class="fun-input w-full p-4 rounded-2xl text-center text-lg">
+                    </div>
+                    <div class="relative group">
+                        <label class="absolute -top-3 left-4 bg-white px-2 text-xs font-bold text-purple-500 shadow-sm rounded-full">Surge (x)</label>
+                        <input type="number" name="surge_multiplier" step="0.25" max="3.0" value="1.0" class="fun-input w-full p-4 rounded-2xl text-center text-lg">
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl border border-white/60 bg-white/30 backdrop-blur-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-xs font-bold text-slate-500 uppercase flex items-center">
+                            <i class="fa-solid fa-cloud-sun mr-2 text-orange-400"></i> Live Weather
+                        </h4>
+                        <label class="flex items-center cursor-pointer">
+                            <span class="text-[10px] font-bold text-slate-400 mr-2 uppercase">Rain?</span>
+                            <input type="checkbox" name="is_rain" class="w-5 h-5 accent-pink-500 rounded-lg">
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <span class="text-[10px] font-bold text-slate-400 block mb-1">TEMP</span>
+                            <input type="range" name="temperature" min="18" max="58" value="39" class="w-full">
+                        </div>
+                        <div class="text-center">
+                            <span class="text-[10px] font-bold text-slate-400 block mb-1">HUMID</span>
+                            <input type="range" name="humidity" min="0" max="1" step="0.1" value="0.7" class="w-full">
+                        </div>
+                        <div class="text-center">
+                            <span class="text-[10px] font-bold text-slate-400 block mb-1">PRESS</span>
+                            <input type="range" name="pressure" min="980" max="1035" value="1010" class="w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="super-btn w-full py-5 rounded-2xl text-lg font-black tracking-widest uppercase shadow-xl transform active:scale-95">
+                    Calculate Price
+                </button>
+            </form>
+        </div>
+
+        <div class="lg:w-5/12 bg-gradient-to-br from-[#7928ca] to-[#ff0080] p-12 text-white flex flex-col items-center justify-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-yellow-300 opacity-20 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+            
+            <div class="z-10 text-center">
+                <div class="w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg border border-white/30">
+                    <i class="fa-solid fa-gem text-4xl text-white"></i>
+                </div>
+                
+                <h2 class="text-pink-200 font-bold tracking-[0.2em] text-sm uppercase mb-2">Total Fare Estimate</h2>
+                
+                <div class="relative">
+                    <h1 id="price" class="text-8xl font-black drop-shadow-md">$0.00</h1>
+                    <i class="fa-solid fa-star text-yellow-300 absolute -top-4 -right-8 text-2xl animate-spin-slow"></i>
+                </div>
+                
+                <div class="mt-8 bg-white/10 px-6 py-2 rounded-full border border-white/20 backdrop-blur-sm inline-flex items-center">
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
+                    <span class="text-xs font-bold tracking-wider">AI MODEL READY</span>
+                </div>
+            </div>
+
+            <div id="loader" class="absolute inset-0 bg-white/20 backdrop-blur-md flex flex-col items-center justify-center hidden">
+                <div class="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p class="font-bold tracking-widest">CALCULATING...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3D Tilt Logic
+        const card = document.getElementById('tilt-card');
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+        });
+
+        // Form Logic
+        document.getElementById('aiForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const f = e.target;
+            const loader = document.getElementById('loader');
+            const priceEl = document.getElementById('price');
+            
+            loader.classList.remove('hidden');
+
+            const now = new Date();
+            const payload = {
+                source: f.source.value, destination: f.destination.value,
+                cab_type: f.cab_type.value, name: f.name.value,
+                distance: parseFloat(f.distance.value), surge_multiplier: parseFloat(f.surge_multiplier.value),
+                temperature: parseFloat(f.temperature.value), humidity: parseFloat(f.humidity.value),
+                pressure: parseFloat(f.pressure.value), is_rain: f.is_rain.checked ? 1 : 0,
+                hour: now.getHours(), day: now.getDate(), month: now.getMonth() + 1
+            };
+
+            try {
+                // Fake delay for effect
+                await new Promise(r => setTimeout(r, 800));
+
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                
+                priceEl.innerText = `$${data.price}`;
+            } catch (err) {
+                console.error(err);
+                priceEl.innerText = "Error";
+            } finally {
+                loader.classList.add('hidden');
+            }
+        };
+    </script>
+</body>
+</html>
