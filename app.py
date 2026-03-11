@@ -1,46 +1,67 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 import joblib
 import pandas as pd
-import numpy as np
 
 app = Flask(__name__)
 
-# Load the files you dumped from Jupyter
-model = joblib.load('Random_Forest_model.joblib')
-encoder = joblib.load('encoder.joblib')
-scaler = joblib.load('scaler.joblib')
+# Load trained ML pipeline components
+model = joblib.load("Random_Forest_model.joblib")
+encoder = joblib.load("encoder.joblib")
+scaler = joblib.load("scaler.joblib")
 
-# These must match your X.columns order exactly
-NUM_COLS = ['hour', 'day', 'month', 'distance', 'surge_multiplier', 'temperature', 'humidity', 'pressure', 'is_rain']
-CAT_COLS = ['source', 'destination', 'cab_type', 'name']
+# Feature columns (must match training data)
+NUM_COLS = [
+    'hour','day','month','distance',
+    'surge_multiplier','temperature',
+    'humidity','pressure','is_rain'
+]
 
-@app.route('/')
+CAT_COLS = [
+    'source','destination','cab_type','name'
+]
+
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return jsonify({"message": "Cab Price Prediction API is running"})
 
-@app.route('/predict', methods=['POST'])
+
+@app.route("/predict", methods=["POST"])
 def predict():
+
     try:
+
         data = request.get_json()
+
+        # Convert input to DataFrame
         input_df = pd.DataFrame([data])
 
-        # 1. OneHotEncode Categories
+        # Encode categorical features
         cat_encoded = encoder.transform(input_df[CAT_COLS])
-        cat_encoded_df = pd.DataFrame(cat_encoded, columns=encoder.get_feature_names_out())
-        
-        # 2. Combine with Numerical
+        cat_encoded_df = pd.DataFrame(
+            cat_encoded,
+            columns=encoder.get_feature_names_out()
+        )
+
+        # Combine numerical + categorical
         num_df = input_df[NUM_COLS].reset_index(drop=True)
         final_df = pd.concat([cat_encoded_df, num_df], axis=1)
-        
-        # 3. Scale Features
+
+        # Scale
         final_scaled = scaler.transform(final_df)
 
-        # 4. Predict
+        # Prediction
         prediction = model.predict(final_scaled)
-        
-        return jsonify({'price': round(float(prediction[0]), 2)})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
 
-if __name__ == '__main__':
+        return jsonify({
+            "predicted_price": float(prediction[0])
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "error": str(e)
+        })
+
+
+if __name__ == "__main__":
     app.run(debug=True)
